@@ -30,11 +30,12 @@ def health():
 def get_meetings(
     q: Optional[str] = None, 
     tag: Optional[str] = None, 
+    date_filter: Optional[str] = None,
     sort_by: Optional[str] = Query("recency", pattern="^(recency|duration|title)$"),
     order: Optional[str] = Query("desc", pattern="^(asc|desc)$"),
     db: Session = Depends(database.get_db)
 ):
-    return crud.get_meetings(db, query=q, tag=tag, sort_by=sort_by, order=order)
+    return crud.get_meetings(db, query=q, tag=tag, date_filter=date_filter, sort_by=sort_by, order=order)
 
 @app.get("/api/meetings/{id}", response_model=schemas.MeetingDetail)
 def get_meeting(id: int, db: Session = Depends(database.get_db)):

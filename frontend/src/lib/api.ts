@@ -19,10 +19,11 @@ async function fetchJSON<T>(url: string, options?: RequestInit): Promise<T> {
 
 export const api = {
   // Meetings Library
-  getMeetings: (params?: { search?: string; tag?: string; sortBy?: 'recency' | 'duration' | 'title'; order?: 'asc' | 'desc' }) => {
+  getMeetings: (params?: { search?: string; tag?: string; dateFilter?: string; sortBy?: 'recency' | 'duration' | 'title'; order?: 'asc' | 'desc' }) => {
     const qp = new URLSearchParams();
     if (params?.search) qp.append('q', params.search);
     if (params?.tag) qp.append('tag', params.tag);
+    if (params?.dateFilter && params.dateFilter !== 'all') qp.append('date_filter', params.dateFilter);
     if (params?.sortBy) qp.append('sort_by', params.sortBy);
     if (params?.order) qp.append('order', params.order);
     return fetchJSON<MeetingListItem[]>(`/meetings?${qp.toString()}`);
@@ -116,6 +117,12 @@ export const api = {
 
   // AskFred AI
   askQuestion: (meetingId: number | string, question: string) =>
+    fetchJSON<{ answer: string; sources: string[] }>(`/meetings/${meetingId}/chat`, {
+      method: 'POST',
+      body: JSON.stringify({ question }),
+    }),
+
+  askFred: (meetingId: number | string, question: string) =>
     fetchJSON<{ answer: string; sources: string[] }>(`/meetings/${meetingId}/chat`, {
       method: 'POST',
       body: JSON.stringify({ question }),

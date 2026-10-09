@@ -94,8 +94,8 @@ export default function ActionItemList({
               key={item.id}
               className={`p-3 rounded-xl border transition-all group ${
                 item.completed
-                  ? 'bg-gray-50/70 dark:bg-gray-900/40 border-gray-200 dark:border-gray-800 opacity-75'
-                  : 'bg-white dark:bg-gray-800/80 border-gray-200/80 dark:border-gray-700 hover:border-primary-300 dark:hover:border-primary-700 shadow-sm'
+                  ? 'bg-[#121218] border-[#1C1C24] opacity-60'
+                  : 'bg-[#181822] border-[#22222E] hover:border-purple-500/40 shadow-sm'
               }`}
             >
               {editingItemId === item.id ? (
@@ -104,18 +104,18 @@ export default function ActionItemList({
                     type="text"
                     value={editText}
                     onChange={(e) => setEditText(e.target.value)}
-                    className="flex-1 text-xs px-2.5 py-1.5 bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-1 focus:ring-primary-500"
+                    className="flex-1 text-xs px-2.5 py-1.5 bg-[#14141C] border border-[#2B2B3C] focus:border-purple-500 rounded-lg text-white focus:outline-none"
                     autoFocus
                   />
                   <button
                     onClick={() => handleEditSave(item)}
-                    className="px-2.5 py-1 text-xs font-medium bg-primary-600 text-white rounded-lg hover:bg-primary-700"
+                    className="px-2.5 py-1 text-xs font-medium bg-[#5B45E0] text-white rounded-lg hover:bg-[#6850EB]"
                   >
                     Save
                   </button>
                   <button
                     onClick={() => setEditingItemId(null)}
-                    className="p-1 text-gray-400 hover:text-gray-600"
+                    className="p-1 text-gray-400 hover:text-white"
                   >
                     <X className="w-3.5 h-3.5" />
                   </button>
@@ -126,8 +126,8 @@ export default function ActionItemList({
                     onClick={() => toggleComplete(item)}
                     className={`mt-0.5 shrink-0 w-4.5 h-4.5 rounded-md border flex items-center justify-center transition-all ${
                       item.completed
-                        ? 'bg-primary-600 border-primary-600 text-white'
-                        : 'border-gray-300 dark:border-gray-600 hover:border-primary-500 bg-white dark:bg-gray-900'
+                        ? 'bg-[#5B45E0] border-[#5B45E0] text-white'
+                        : 'border-gray-600 hover:border-purple-400 bg-[#161622]'
                     }`}
                     title={item.completed ? 'Mark pending' : 'Mark completed'}
                   >
@@ -136,10 +136,10 @@ export default function ActionItemList({
 
                   <div className="flex-1 min-w-0">
                     <p
-                      className={`text-sm leading-snug transition-all ${
+                      className={`text-xs sm:text-sm leading-snug transition-all ${
                         item.completed
-                          ? 'text-gray-400 dark:text-gray-500 line-through'
-                          : 'text-gray-800 dark:text-gray-200'
+                          ? 'text-gray-500 line-through'
+                          : 'text-gray-200'
                       }`}
                     >
                       {item.text}

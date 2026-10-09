@@ -20,18 +20,18 @@ export default function IntegrationsPage() {
   };
 
   return (
-    <div className="flex flex-col h-full overflow-hidden bg-gray-50 dark:bg-gray-900">
+    <div className="flex flex-col h-full overflow-hidden bg-[#0E0E12] text-gray-100 select-none">
       <Navbar />
 
       <div className="flex-1 overflow-y-auto p-6 md:p-8 max-w-5xl w-full mx-auto space-y-6">
-        <div>
-          <div className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-primary-50 dark:bg-primary-950/50 text-primary-600 dark:text-primary-400 rounded-full text-xs font-semibold mb-2">
-            <Puzzle className="w-3.5 h-3.5" /> Integrations Hub
+        <div className="border-b border-[#1E1E28] pb-4">
+          <div className="flex items-center gap-2">
+            <Puzzle className="w-5 h-5 text-purple-400" />
+            <h1 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
+              App Integrations
+            </h1>
           </div>
-          <h1 className="text-xl font-heading font-bold text-gray-900 dark:text-white">
-            App Integrations
-          </h1>
-          <p className="text-xs text-gray-500 mt-0.5">
+          <p className="text-xs sm:text-sm text-gray-400 mt-1">
             Connect your video conferencing, CRM, and workflow tools to automate meeting intelligence.
           </p>
         </div>
@@ -40,39 +40,38 @@ export default function IntegrationsPage() {
           {INTEGRATIONS.map((app) => (
             <div
               key={app.name}
-              className="bg-white dark:bg-gray-800/90 p-5 rounded-2xl border border-gray-200/80 dark:border-gray-700/80 shadow-xs flex flex-col justify-between space-y-4"
+              className="bg-[#15151D] p-5 rounded-2xl border border-[#22222E] shadow-sm flex flex-col justify-between space-y-4 hover:border-purple-500/40 transition-all"
             >
               <div>
                 <div className="flex items-center justify-between mb-1.5">
-                  <h3 className="text-sm font-bold text-gray-900 dark:text-white">{app.name}</h3>
+                  <h3 className="text-sm font-bold text-white">{app.name}</h3>
                   {app.connected ? (
-                    <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-950/50 px-2 py-0.5 rounded-full">
+                    <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full">
                       <CheckCircle2 className="w-3 h-3" /> Active
                     </span>
                   ) : (
-                    <span className="text-[10px] uppercase font-bold tracking-wider text-gray-400 bg-gray-100 dark:bg-gray-700 px-2 py-0.5 rounded-full">
+                    <span className="text-[10px] uppercase font-bold tracking-wider text-gray-400 bg-[#20202A] px-2 py-0.5 rounded-full">
                       Coming Soon
                     </span>
                   )}
                 </div>
-                <span className="text-[10px] font-medium text-primary-600 dark:text-primary-400">{app.category}</span>
-                <p className="text-xs text-gray-500 dark:text-gray-400 mt-2 leading-relaxed">
+                <span className="text-[10px] font-medium text-purple-400">{app.category}</span>
+                <p className="text-xs text-gray-400 mt-2 leading-relaxed">
                   {app.description}
                 </p>
               </div>
 
-              <div className="pt-2 border-t border-gray-100 dark:border-gray-700/50 flex justify-end">
-                <button
-                  onClick={() => handleConnect(app.name)}
-                  className={`text-xs font-semibold px-3 py-1.5 rounded-xl transition-all ${
-                    app.connected
-                      ? 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
-                      : 'bg-primary-600 hover:bg-primary-700 text-white shadow-xs'
-                  }`}
-                >
-                  {app.connected ? 'Configure' : 'Connect'}
-                </button>
-              </div>
+              <button
+                onClick={() => handleConnect(app.name)}
+                className={`w-full py-2 px-3 text-xs font-semibold rounded-xl flex items-center justify-center gap-1.5 transition-all ${
+                  app.connected
+                    ? 'bg-[#1C1C26] text-gray-300 hover:text-white border border-white/5'
+                    : 'bg-[#5B45E0] hover:bg-[#6850EB] text-white shadow-md shadow-purple-900/20'
+                }`}
+              >
+                <span>{app.connected ? 'Manage Settings' : 'Connect'}</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </button>
             </div>
           ))}
         </div>

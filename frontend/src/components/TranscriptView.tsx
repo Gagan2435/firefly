@@ -182,12 +182,12 @@ export default function TranscriptView({
   };
 
   return (
-    <div className="flex flex-col h-full bg-white dark:bg-gray-800/90 rounded-2xl border border-gray-200 dark:border-gray-700/80 shadow-xs overflow-hidden">
+    <div className="flex flex-col h-full bg-[#15151D] rounded-2xl border border-[#22222E] shadow-sm overflow-hidden text-gray-100">
       {/* Top filter and search bar */}
-      <div className="p-3.5 border-b border-gray-200 dark:border-gray-700/80 bg-gray-50/70 dark:bg-gray-800/50 flex flex-col sm:flex-row items-center gap-3">
+      <div className="p-3 border-b border-[#22222E] bg-[#121218] flex flex-col sm:flex-row items-center gap-3">
         {/* Search Input */}
         <div className="relative flex-1 w-full">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400" />
           <input
             type="text"
             placeholder="Search in transcript..."
@@ -196,20 +196,20 @@ export default function TranscriptView({
               setSearch(e.target.value);
               setCurrentMatchIndex(0);
             }}
-            className="w-full pl-9 pr-20 py-2 text-xs bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 transition-all"
+            className="w-full pl-9 pr-20 py-1.5 text-xs bg-[#1A1A24] border border-[#2B2B3C] focus:border-purple-500 rounded-lg text-white placeholder-gray-500 focus:outline-none transition-all"
           />
           {search && (
-            <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400">
+            <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1 text-xs text-gray-400">
               <span className="text-[11px] font-mono">
                 {matchSegmentIds.length > 0 ? `${currentMatchIndex + 1}/${matchSegmentIds.length}` : '0/0'}
               </span>
-              <button onClick={handlePrevMatch} className="p-0.5 hover:text-gray-900 dark:hover:text-white">
+              <button onClick={handlePrevMatch} className="p-0.5 hover:text-white">
                 <ChevronUp className="w-3.5 h-3.5" />
               </button>
-              <button onClick={handleNextMatch} className="p-0.5 hover:text-gray-900 dark:hover:text-white">
+              <button onClick={handleNextMatch} className="p-0.5 hover:text-white">
                 <ChevronDown className="w-3.5 h-3.5" />
               </button>
-              <button onClick={() => setSearch('')} className="p-0.5 hover:text-gray-900 dark:hover:text-white">
+              <button onClick={() => setSearch('')} className="p-0.5 hover:text-white">
                 <X className="w-3.5 h-3.5" />
               </button>
             </div>
@@ -221,11 +221,11 @@ export default function TranscriptView({
           <select
             value={speakerFilter}
             onChange={(e) => setSpeakerFilter(e.target.value)}
-            className="w-full sm:w-auto text-xs px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-xl text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-primary-500"
+            className="w-full sm:w-auto text-xs px-3 py-1.5 bg-[#1A1A24] border border-[#2B2B3C] focus:border-purple-500 rounded-lg text-gray-200 focus:outline-none cursor-pointer"
           >
             <option value="all">All Speakers ({uniqueSpeakers.length})</option>
             {uniqueSpeakers.map((spk) => (
-              <option key={spk} value={spk}>
+              <option key={spk} value={spk} className="bg-[#181822] text-white">
                 {spk}
               </option>
             ))}
@@ -250,12 +250,17 @@ export default function TranscriptView({
               <div
                 id={`segment-${segment.id}`}
                 key={segment.id}
-                className={`flex gap-3.5 p-3.5 rounded-2xl transition-all border group ${
+                onClick={(e) => {
+                  const target = e.target as HTMLElement;
+                  if (target.closest('button') || target.closest('input')) return;
+                  onTimeClick(segment.start_time);
+                }}
+                className={`cursor-pointer flex gap-3.5 p-3.5 rounded-2xl transition-all border group ${
                   isActive
-                    ? 'bg-primary-50/80 dark:bg-primary-950/40 border-primary-300 dark:border-primary-800 shadow-xs'
+                    ? 'bg-[#221B38] border-l-4 border-l-[#8165F5] border-[#3A2D5C] shadow-md ring-1 ring-purple-500/20'
                     : segment.is_bookmarked
-                    ? 'bg-amber-50/50 dark:bg-amber-950/20 border-amber-300 dark:border-amber-800/60'
-                    : 'bg-white dark:bg-gray-800/40 border-transparent hover:border-gray-200 dark:hover:border-gray-700 hover:bg-gray-50/60 dark:hover:bg-gray-800/80'
+                    ? 'bg-amber-950/20 border-l-4 border-l-amber-500 border-amber-800/40'
+                    : 'bg-[#181822] border-[#22222E] hover:border-[#323244]'
                 }`}
               >
                 {/* Speaker Avatar & Timestamp */}
@@ -270,7 +275,7 @@ export default function TranscriptView({
                   </div>
                   <button
                     onClick={() => onTimeClick(segment.start_time)}
-                    className="text-[11px] font-mono font-medium text-primary-600 dark:text-primary-400 hover:underline px-1 py-0.5 rounded bg-primary-50 dark:bg-primary-950/50 transition-colors"
+                    className="text-[11px] font-mono font-medium text-purple-300 hover:text-white px-1 py-0.5 rounded bg-purple-950/60 border border-purple-800/40 transition-colors"
                     title={`Seek to ${formatTime(segment.start_time)}`}
                   >
                     {formatTime(segment.start_time)}

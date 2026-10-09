@@ -122,25 +122,42 @@ export default function MeetingDetailPage({ params }: { params: { id: string } }
   }
 
   return (
-    <div className="h-full flex flex-col overflow-hidden bg-gray-50 dark:bg-gray-900">
+    <div className="h-full flex flex-col overflow-hidden bg-[#0E0E12] text-gray-100 select-none">
       {/* Top Notepad Header */}
-      <header className="bg-white dark:bg-gray-800/90 border-b border-gray-200 dark:border-gray-700/80 px-5 py-3 flex items-center justify-between shrink-0 shadow-xs z-10">
+      <header className="bg-[#111115] border-b border-[#1E1E24] px-5 py-3 flex items-center justify-between shrink-0 shadow-xs z-10">
         <div className="flex items-center gap-3 min-w-0">
           <Link
-            href="/"
-            className="p-1.5 text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700/60 rounded-xl transition-colors"
-            title="Back to Notebook"
+            href="/meetings"
+            className="p-1.5 text-gray-400 hover:text-white hover:bg-white/[0.05] rounded-lg transition-colors"
+            title="Back to Meetings"
           >
             <ArrowLeft className="w-4 h-4" />
           </Link>
           <div className="min-w-0">
             <div className="flex items-center gap-2">
               <span className="text-[11px] font-medium text-gray-400">Notebook /</span>
-              <h1 className="text-sm font-heading font-bold text-gray-900 dark:text-white truncate max-w-sm sm:max-w-md">
+              <h1 className="text-sm font-heading font-bold text-white truncate max-w-sm sm:max-w-md">
                 {meeting.title}
               </h1>
+              <button 
+                onClick={() => setEditOpen(true)} 
+                className="p-1 text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700/60 transition-colors"
+                title="Edit title & participants"
+              >
+                <Edit3 className="w-3.5 h-3.5" />
+              </button>
             </div>
             <div className="flex flex-wrap items-center gap-2 text-[11px] text-gray-500 dark:text-gray-400">
+              <span className={`text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.2 rounded ${
+                meeting.id % 3 === 0
+                  ? 'bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400'
+                  : meeting.id % 3 === 1
+                  ? 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400'
+                  : 'bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400'
+              }`}>
+                {meeting.id % 3 === 0 ? 'Zoom' : meeting.id % 3 === 1 ? 'Google Meet' : 'MS Teams'}
+              </span>
+              <span>•</span>
               <span className="flex items-center gap-1">
                 <Calendar className="w-3 h-3 text-gray-400" />
                 {formatDate(meeting.date)}
@@ -150,6 +167,19 @@ export default function MeetingDetailPage({ params }: { params: { id: string } }
                 <Clock className="w-3 h-3 text-gray-400" />
                 {formatTime(meeting.duration)}
               </span>
+              {meeting.participants && meeting.participants.length > 0 && (
+                <div className="flex -space-x-1.5 overflow-hidden ml-1">
+                  {meeting.participants.map((p, i) => (
+                    <div 
+                      key={p.id || i} 
+                      className="w-5 h-5 rounded-full bg-indigo-100 text-indigo-700 dark:bg-indigo-900 dark:text-indigo-200 border border-white dark:border-gray-800 flex items-center justify-center text-[9px] font-bold"
+                      title={p.name}
+                    >
+                      {p.name.charAt(0)}
+                    </div>
+                  ))}
+                </div>
+              )}
               {meeting.tags && meeting.tags.length > 0 && (
                 <div className="flex items-center gap-1 ml-1">
                   {meeting.tags.map((t) => (
@@ -162,13 +192,13 @@ export default function MeetingDetailPage({ params }: { params: { id: string } }
         </div>
 
         {/* Center Mode Tabs: Thread, Media, Soundbites */}
-        <div className="hidden md:flex p-1 bg-gray-100 dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 text-xs">
+        <div className="hidden md:flex p-1 bg-[#161620] rounded-xl border border-[#22222E] text-xs">
           <button
             onClick={() => setActiveTab('thread')}
             className={`px-3 py-1 font-semibold rounded-lg flex items-center gap-1.5 transition-all ${
               activeTab === 'thread'
-                ? 'bg-white dark:bg-gray-700 text-primary-600 dark:text-primary-400 shadow-xs'
-                : 'text-gray-500 hover:text-gray-900 dark:hover:text-white'
+                ? 'bg-[#252535] text-white shadow-sm'
+                : 'text-gray-400 hover:text-white'
             }`}
           >
             <FileText className="w-3.5 h-3.5" />
@@ -178,8 +208,8 @@ export default function MeetingDetailPage({ params }: { params: { id: string } }
             onClick={() => setActiveTab('media')}
             className={`px-3 py-1 font-semibold rounded-lg flex items-center gap-1.5 transition-all ${
               activeTab === 'media'
-                ? 'bg-white dark:bg-gray-700 text-primary-600 dark:text-primary-400 shadow-xs'
-                : 'text-gray-500 hover:text-gray-900 dark:hover:text-white'
+                ? 'bg-[#252535] text-white shadow-sm'
+                : 'text-gray-400 hover:text-white'
             }`}
           >
             <Volume2 className="w-3.5 h-3.5" />
@@ -189,8 +219,8 @@ export default function MeetingDetailPage({ params }: { params: { id: string } }
             onClick={() => setActiveTab('soundbites')}
             className={`px-3 py-1 font-semibold rounded-lg flex items-center gap-1.5 transition-all ${
               activeTab === 'soundbites'
-                ? 'bg-white dark:bg-gray-700 text-primary-600 dark:text-primary-400 shadow-xs'
-                : 'text-gray-500 hover:text-gray-900 dark:hover:text-white'
+                ? 'bg-[#252535] text-white shadow-sm'
+                : 'text-gray-400 hover:text-white'
             }`}
           >
             <Bookmark className="w-3.5 h-3.5" />
@@ -202,7 +232,7 @@ export default function MeetingDetailPage({ params }: { params: { id: string } }
         <div className="flex items-center gap-1.5 shrink-0">
           <button
             onClick={() => setShowFred(!showFred)}
-            className="inline-flex items-center gap-1.5 bg-gradient-to-r from-primary-600 to-indigo-600 hover:from-primary-500 hover:to-indigo-500 text-white px-3.5 py-1.5 rounded-xl text-xs font-semibold shadow-xs transition-all active:scale-98"
+            className="inline-flex items-center gap-1.5 bg-[#5B45E0] hover:bg-[#6850EB] text-white px-3.5 py-1.5 rounded-lg text-xs font-semibold shadow-md shadow-purple-900/25 transition-all active:scale-98"
           >
             <Sparkles className="w-3.5 h-3.5" />
             <span>Ask Fred</span>
@@ -210,7 +240,7 @@ export default function MeetingDetailPage({ params }: { params: { id: string } }
 
           <button
             onClick={() => setExportOpen(true)}
-            className="p-1.5 text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700/60 rounded-xl transition-colors"
+            className="p-1.5 text-gray-400 hover:text-white hover:bg-white/[0.05] rounded-lg transition-colors"
             title="Export transcript / summary"
           >
             <Download className="w-4 h-4" />
@@ -218,15 +248,15 @@ export default function MeetingDetailPage({ params }: { params: { id: string } }
 
           <button
             onClick={handleShareLink}
-            className="p-1.5 text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700/60 rounded-xl transition-colors"
+            className="p-1.5 text-gray-400 hover:text-white hover:bg-white/[0.05] rounded-lg transition-colors"
             title="Share meeting link"
           >
-            {copiedLink ? <Check className="w-4 h-4 text-green-500" /> : <Share2 className="w-4 h-4" />}
+            {copiedLink ? <Check className="w-4 h-4 text-green-400" /> : <Share2 className="w-4 h-4" />}
           </button>
 
           <button
             onClick={() => setEditOpen(true)}
-            className="p-1.5 text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700/60 rounded-xl transition-colors"
+            className="p-1.5 text-gray-400 hover:text-white hover:bg-white/[0.05] rounded-lg transition-colors"
             title="Edit metadata"
           >
             <Edit3 className="w-4 h-4" />

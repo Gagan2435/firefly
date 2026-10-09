@@ -2,7 +2,7 @@ from sqlalchemy.orm import Session, joinedload
 from sqlalchemy import or_, desc, asc
 import models
 import schemas
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 import re
 import json
 import ai_engine
@@ -11,6 +11,7 @@ def get_meetings(
     db: Session, 
     query: str = None, 
     tag: str = None, 
+    date_filter: str = None,
     sort_by: str = "recency", 
     order: str = "desc"
 ):
@@ -29,6 +30,18 @@ def get_meetings(
         
     if tag:
         q = q.filter(models.Meeting.tags.any(models.Tag.name == tag))
+
+    if date_filter and date_filter != "all":
+        now = datetime.now(timezone.utc)
+        if date_filter == "today":
+            start_of_today = datetime(now.year, now.month, now.day, tzinfo=timezone.utc)
+            q = q.filter(models.Meeting.date >= start_of_today)
+        elif date_filter == "last_7_days":
+            start_date = now - timedelta(days=7)
+            q = q.filter(models.Meeting.date >= start_date)
+        elif date_filter == "last_30_days":
+            start_date = now - timedelta(days=30)
+            q = q.filter(models.Meeting.date >= start_date)
         
     if sort_by == "duration":
         q = q.order_by(desc(models.Meeting.duration) if order == "desc" else asc(models.Meeting.duration))

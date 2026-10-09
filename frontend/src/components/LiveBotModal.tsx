@@ -1,6 +1,6 @@
 "use client";
 import { useState } from 'react';
-import { X, Bot, Sparkles, CheckCircle2 } from 'lucide-react';
+import { X, Link2, CheckCircle2 } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 export default function LiveBotModal({
@@ -10,117 +10,129 @@ export default function LiveBotModal({
   isOpen: boolean;
   onClose: () => void;
 }) {
-  const [meetingUrl, setMeetingUrl] = useState('');
-  const [botName, setBotName] = useState('Fireflies.ai Notetaker (Fred)');
-  const [joining, setJoining] = useState(false);
-  const [joined, setJoined] = useState(false);
+  const [meetingName, setMeetingName] = useState('');
+  const [meetingLink, setMeetingLink] = useState('');
+  const [language, setLanguage] = useState('English (Global)');
+  const [capturing, setCapturing] = useState(false);
+  const [success, setSuccess] = useState(false);
 
   if (!isOpen) return null;
 
-  const handleJoin = (e: React.FormEvent) => {
+  const handleStartCapture = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!meetingUrl.trim()) {
-      toast.error('Please enter a valid Zoom, Google Meet, or Teams URL');
+    if (!meetingLink.trim()) {
+      toast.error('Please enter a valid meeting invite link');
       return;
     }
-    setJoining(true);
+    setCapturing(true);
     setTimeout(() => {
-      setJoining(false);
-      setJoined(true);
-      toast.success('Fred is joining the meeting as a silent notetaker!');
+      setCapturing(false);
+      setSuccess(true);
+      toast.success('Fireflies Notetaker dispatched to meeting!');
       setTimeout(() => {
-        setJoined(false);
-        setMeetingUrl('');
+        setSuccess(false);
+        setMeetingLink('');
+        setMeetingName('');
         onClose();
-      }, 2000);
-    }, 1500);
+      }, 1800);
+    }, 1200);
   };
 
   return (
-    <div className="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 flex items-center justify-center p-4">
-      <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-md overflow-hidden border border-gray-200 dark:border-gray-700">
-        <div className="flex justify-between items-center px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-800/50">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-primary-600 to-indigo-600 flex items-center justify-center text-white">
-              <Bot className="w-4 h-4" />
-            </div>
-            <div>
-              <h2 className="text-base font-bold text-gray-900 dark:text-white">Add Fred to Live Call</h2>
-              <span className="text-[11px] font-semibold text-primary-600 dark:text-primary-400 uppercase tracking-wide">
-                Live Notetaker Bot
-              </span>
-            </div>
-          </div>
-          <button onClick={onClose} className="p-1.5 text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 rounded-lg">
-            <X className="w-5 h-5" />
+    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 text-gray-100 select-none animate-fade-in">
+      <div className="bg-[#181822] border border-[#2B2B3C] rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden flex flex-col">
+        {/* Header */}
+        <div className="flex justify-between items-center px-6 py-4 border-b border-white/5 bg-[#1B1B26]">
+          <h2 className="text-sm font-semibold text-white">Add to live meeting</h2>
+          <button 
+            onClick={onClose} 
+            className="p-1 text-gray-400 hover:text-white rounded-lg hover:bg-white/5 transition-colors"
+          >
+            <X className="w-4 h-4" />
           </button>
         </div>
 
+        {/* Content */}
         <div className="p-6">
-          {joined ? (
+          {success ? (
             <div className="text-center py-6 space-y-3">
-              <div className="w-12 h-12 bg-green-100 dark:bg-green-950 text-green-600 dark:text-green-400 rounded-full flex items-center justify-center mx-auto">
+              <div className="w-12 h-12 bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 rounded-full flex items-center justify-center mx-auto">
                 <CheckCircle2 className="w-6 h-6" />
               </div>
-              <h3 className="text-sm font-bold text-gray-900 dark:text-white">
-                Fred Dispatched Successfully!
+              <h3 className="text-sm font-semibold text-white">
+                Notetaker Dispatched Successfully!
               </h3>
-              <p className="text-xs text-gray-500">
-                The notetaker will request admission into your meeting room in ~10 seconds. Notes will appear in your Notebook once the call finishes.
+              <p className="text-xs text-gray-400 max-w-xs mx-auto">
+                Fireflies will request access to the call in a few seconds. The transcript and AI summary will sync to your notebook.
               </p>
             </div>
           ) : (
-            <form onSubmit={handleJoin} className="space-y-4">
+            <form onSubmit={handleStartCapture} className="space-y-4">
               <div>
-                <label className="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1.5">
-                  Meeting Invite Link *
-                </label>
-                <input
-                  type="url"
-                  required
-                  placeholder="https://zoom.us/j/... or https://meet.google.com/..."
-                  value={meetingUrl}
-                  onChange={(e) => setMeetingUrl(e.target.value)}
-                  className="w-full text-xs px-3.5 py-2.5 bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1.5">
-                  Bot Display Name
+                <label className="block text-xs font-medium text-gray-300 mb-1.5">
+                  Name your meeting <span className="text-gray-500 font-normal">(Optional)</span>
                 </label>
                 <input
                   type="text"
-                  value={botName}
-                  onChange={(e) => setBotName(e.target.value)}
-                  className="w-full text-xs px-3.5 py-2.5 bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  placeholder="e.g. Product team sync"
+                  value={meetingName}
+                  onChange={(e) => setMeetingName(e.target.value)}
+                  className="w-full text-xs px-3.5 py-2.5 bg-[#14141C] border border-[#2B2B3C] focus:border-purple-500 rounded-xl text-white placeholder-gray-500 focus:outline-none transition-colors"
                 />
               </div>
 
-              <div className="p-3 bg-primary-50/60 dark:bg-primary-950/30 border border-primary-100 dark:border-primary-900/40 rounded-xl space-y-1 text-xs text-primary-900 dark:text-primary-300">
-                <div className="flex items-center gap-1.5 font-semibold text-primary-700 dark:text-primary-300">
-                  <Sparkles className="w-3.5 h-3.5" />
-                  Live Meeting Intelligence
-                </div>
-                <p className="text-[11px] text-gray-600 dark:text-gray-400">
-                  Fred will automatically record the audio track, perform speaker diarization, and generate action items and an executive summary.
+              <div>
+                <label className="block text-xs font-medium text-gray-300 mb-1">
+                  Meeting link
+                </label>
+                <p className="text-[11px] text-gray-400 mb-2">
+                  Capture meetings from GMeet, Zoom, MS Teams, and more.
                 </p>
+                <div className="relative">
+                  <Link2 className="w-4 h-4 text-gray-500 absolute left-3 top-1/2 -translate-y-1/2" />
+                  <input
+                    type="url"
+                    required
+                    placeholder="https://meet.google.com/xxx-xxxx-xxx"
+                    value={meetingLink}
+                    onChange={(e) => setMeetingLink(e.target.value)}
+                    className="w-full text-xs pl-9 pr-3.5 py-2.5 bg-[#14141C] border border-[#2B2B3C] focus:border-purple-500 rounded-xl text-white placeholder-gray-500 focus:outline-none transition-colors"
+                  />
+                </div>
               </div>
 
-              <div className="flex justify-end gap-2.5 pt-2">
+              <div>
+                <label className="block text-xs font-medium text-gray-300 mb-1.5">
+                  Meeting language
+                </label>
+                <select
+                  value={language}
+                  onChange={(e) => setLanguage(e.target.value)}
+                  className="w-full text-xs px-3.5 py-2.5 bg-[#14141C] border border-[#2B2B3C] focus:border-purple-500 rounded-xl text-gray-200 focus:outline-none cursor-pointer"
+                >
+                  <option value="English (Global)">English (Global)</option>
+                  <option value="Spanish (Español)">Spanish (Español)</option>
+                  <option value="French (Français)">French (Français)</option>
+                  <option value="German (Deutsch)">German (Deutsch)</option>
+                  <option value="Hindi (हिन्दी)">Hindi (हिन्दी)</option>
+                </select>
+              </div>
+
+              {/* Actions */}
+              <div className="flex items-center justify-end gap-2 pt-3 border-t border-white/5">
                 <button
                   type="button"
                   onClick={onClose}
-                  className="px-4 py-2 text-xs font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
+                  className="px-4 py-2 text-xs font-medium text-gray-400 hover:text-white rounded-lg transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  disabled={joining || !meetingUrl}
-                  className="px-4 py-2 text-xs font-medium bg-primary-600 hover:bg-primary-700 disabled:opacity-50 text-white rounded-lg shadow-sm"
+                  disabled={capturing}
+                  className="px-5 py-2 bg-[#5B45E0] hover:bg-[#6850EB] disabled:opacity-50 text-white rounded-xl text-xs font-semibold shadow-md shadow-purple-900/30 transition-all"
                 >
-                  {joining ? 'Connecting Bot...' : 'Send Bot to Call'}
+                  {capturing ? 'Connecting...' : 'Start Capturing'}
                 </button>
               </div>
             </form>

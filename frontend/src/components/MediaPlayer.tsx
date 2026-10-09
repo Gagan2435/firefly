@@ -65,7 +65,7 @@ export default function MediaPlayer({
   });
 
   return (
-    <div className="bg-gray-900/95 dark:bg-gray-900 border border-gray-800 text-white p-4 rounded-xl shadow-xl backdrop-blur-md sticky top-0 z-20 mb-4 transition-all">
+    <div className="bg-[#14141C] border border-[#22222E] text-white p-4 rounded-xl shadow-xl sticky top-0 z-20 mb-4 transition-all">
       {/* Waveform Visualization */}
       <div 
         className="h-10 flex items-end justify-between gap-1 mb-3 cursor-pointer group px-1 relative"

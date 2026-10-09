@@ -59,49 +59,52 @@ export default function TasksPage() {
   });
 
   return (
-    <div className="flex flex-col h-full overflow-hidden bg-gray-50 dark:bg-gray-900">
+    <div className="flex flex-col h-full overflow-hidden bg-[#0E0E12] text-gray-100 select-none">
       <Navbar onMeetingCreated={fetchTasks} />
 
       <div className="flex-1 overflow-y-auto p-6 md:p-8 max-w-5xl w-full mx-auto space-y-6">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#1E1E28] pb-4">
           <div>
-            <h1 className="text-xl font-heading font-bold text-gray-900 dark:text-white">
-              Action Items & Tasks
-            </h1>
-            <p className="text-xs text-gray-500 mt-0.5">
-              Manage and track tasks extracted across all meeting transcripts
+            <div className="flex items-center gap-2">
+              <CheckSquare className="w-5 h-5 text-purple-400" />
+              <h1 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
+                Action Items & Tasks
+              </h1>
+            </div>
+            <p className="text-xs sm:text-sm text-gray-400 mt-1">
+              Manage and track tasks extracted across all meeting transcripts.
             </p>
           </div>
 
           {/* Filter switches */}
           <div className="flex items-center gap-2">
-            <div className="flex p-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl">
+            <div className="flex p-1 bg-[#161622] border border-[#262636] rounded-xl text-xs">
               <button
                 onClick={() => setFilter('all')}
-                className={`px-3 py-1 text-xs font-semibold rounded-lg transition-all ${
+                className={`px-3 py-1 font-medium rounded-lg transition-all ${
                   filter === 'all'
-                    ? 'bg-primary-600 text-white'
-                    : 'text-gray-600 dark:text-gray-300 hover:text-gray-900'
+                    ? 'bg-[#5B45E0] text-white'
+                    : 'text-gray-400 hover:text-white'
                 }`}
               >
                 All ({tasks.length})
               </button>
               <button
                 onClick={() => setFilter('pending')}
-                className={`px-3 py-1 text-xs font-semibold rounded-lg transition-all ${
+                className={`px-3 py-1 font-medium rounded-lg transition-all ${
                   filter === 'pending'
-                    ? 'bg-primary-600 text-white'
-                    : 'text-gray-600 dark:text-gray-300 hover:text-gray-900'
+                    ? 'bg-[#5B45E0] text-white'
+                    : 'text-gray-400 hover:text-white'
                 }`}
               >
                 Pending ({tasks.filter((t) => !t.completed).length})
               </button>
               <button
                 onClick={() => setFilter('completed')}
-                className={`px-3 py-1 text-xs font-semibold rounded-lg transition-all ${
+                className={`px-3 py-1 font-medium rounded-lg transition-all ${
                   filter === 'completed'
-                    ? 'bg-primary-600 text-white'
-                    : 'text-gray-600 dark:text-gray-300 hover:text-gray-900'
+                    ? 'bg-[#5B45E0] text-white'
+                    : 'text-gray-400 hover:text-white'
                 }`}
               >
                 Completed ({tasks.filter((t) => t.completed).length})
@@ -112,11 +115,11 @@ export default function TasksPage() {
               <select
                 value={assigneeFilter}
                 onChange={(e) => setAssigneeFilter(e.target.value)}
-                className="text-xs px-3 py-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-gray-700 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                className="text-xs px-3 py-1.5 bg-[#161622] border border-[#262636] rounded-xl text-gray-300 focus:outline-none focus:border-purple-500 cursor-pointer"
               >
                 <option value="all">All Assignees</option>
                 {uniqueAssignees.map((name) => (
-                  <option key={name} value={name}>
+                  <option key={name} value={name} className="bg-[#181822] text-white">
                     {name}
                   </option>
                 ))}
@@ -129,14 +132,14 @@ export default function TasksPage() {
         {loading ? (
           <div className="space-y-3">
             {[1, 2, 3, 4].map((n) => (
-              <div key={n} className="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-200 dark:border-gray-700 animate-pulse h-16" />
+              <div key={n} className="bg-[#15151D] rounded-xl p-4 border border-[#22222E] animate-pulse h-16" />
             ))}
           </div>
         ) : filteredTasks.length === 0 ? (
-          <div className="text-center py-16 px-4 bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 space-y-2">
-            <CheckSquare className="w-10 h-10 text-gray-300 mx-auto mb-2" />
-            <h3 className="text-sm font-bold text-gray-900 dark:text-white">No tasks found</h3>
-            <p className="text-xs text-gray-500">
+          <div className="text-center py-16 px-4 bg-[#14141B] rounded-2xl border border-[#22222E] space-y-2">
+            <CheckSquare className="w-10 h-10 text-gray-500 mx-auto mb-2" />
+            <h3 className="text-sm font-bold text-white">No tasks found</h3>
+            <p className="text-xs text-gray-400">
               {filter !== 'all' ? 'No tasks match the active filter status.' : 'No action items extracted yet.'}
             </p>
           </div>
@@ -147,16 +150,16 @@ export default function TasksPage() {
                 key={task.id}
                 className={`p-4 rounded-xl border transition-all flex items-start gap-3.5 group ${
                   task.completed
-                    ? 'bg-gray-50/60 dark:bg-gray-900/40 border-gray-200 dark:border-gray-800/80 opacity-70'
-                    : 'bg-white dark:bg-gray-800/90 border-gray-200 dark:border-gray-700/80 hover:border-primary-400 dark:hover:border-primary-600 shadow-xs'
+                    ? 'bg-[#121218] border-[#1C1C24] opacity-60'
+                    : 'bg-[#15151D] border-[#22222E] hover:border-purple-500/40 shadow-sm'
                 }`}
               >
                 <button
                   onClick={() => toggleComplete(task)}
                   className={`mt-0.5 shrink-0 w-5 h-5 rounded-md border flex items-center justify-center transition-all ${
                     task.completed
-                      ? 'bg-primary-600 border-primary-600 text-white'
-                      : 'border-gray-300 dark:border-gray-600 hover:border-primary-500 bg-white dark:bg-gray-900'
+                      ? 'bg-[#5B45E0] border-[#5B45E0] text-white'
+                      : 'border-gray-600 hover:border-purple-400 bg-[#1A1A24]'
                   }`}
                   title={task.completed ? 'Mark pending' : 'Mark completed'}
                 >
@@ -166,10 +169,10 @@ export default function TasksPage() {
                 <div className="flex-1 min-w-0">
                   <div className="flex flex-wrap items-center justify-between gap-2">
                     <p
-                      className={`text-sm font-medium leading-snug transition-all ${
+                      className={`text-xs sm:text-sm font-medium leading-snug transition-all ${
                         task.completed
-                          ? 'text-gray-400 dark:text-gray-500 line-through'
-                          : 'text-gray-900 dark:text-white'
+                          ? 'text-gray-500 line-through'
+                          : 'text-white'
                       }`}
                     >
                       {task.text}
@@ -177,27 +180,27 @@ export default function TasksPage() {
 
                     <Link
                       href={`/meetings/${task.meeting_id}`}
-                      className="inline-flex items-center gap-1 text-[11px] font-semibold text-primary-600 dark:text-primary-400 hover:underline shrink-0"
+                      className="inline-flex items-center gap-1 text-[11px] font-semibold text-purple-400 hover:text-purple-300 hover:underline shrink-0"
                     >
                       <span>{task.meeting_title}</span>
                       <ExternalLink className="w-3 h-3" />
                     </Link>
                   </div>
 
-                  <div className="flex flex-wrap items-center gap-3 mt-2 text-xs text-gray-500 dark:text-gray-400">
+                  <div className="flex flex-wrap items-center gap-3 mt-2 text-xs text-gray-400">
                     {task.assignee && (
-                      <span className="inline-flex items-center gap-1 bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 px-2 py-0.5 rounded-full text-[11px] font-medium">
+                      <span className="inline-flex items-center gap-1 bg-purple-950/60 border border-purple-800/40 text-purple-300 px-2 py-0.5 rounded-full text-[11px] font-medium">
                         <User className="w-3 h-3" />
                         {task.assignee}
                       </span>
                     )}
                     {task.due_date && (
-                      <span className="inline-flex items-center gap-1 text-[11px]">
-                        <Calendar className="w-3 h-3 text-gray-400" />
+                      <span className="inline-flex items-center gap-1 text-[11px] text-gray-400">
+                        <Calendar className="w-3 h-3 text-gray-500" />
                         Due: {task.due_date}
                       </span>
                     )}
-                    <span className="text-[11px] text-gray-400">
+                    <span className="text-[11px] text-gray-500">
                       • Recorded {formatDate(task.meeting_date)}
                     </span>
                   </div>
